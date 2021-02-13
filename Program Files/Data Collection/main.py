@@ -40,14 +40,24 @@ def team(name):
     blocks=list(df["BLK"])#Blocks per game
     assists=list(df["AST"])
     games=list(df["G"])
+    turnovers=list(df["TOV"])
+    freethrows=list(df["FT"])
+    free_throw_attempts=list(df["FTA"])
+    missed_field_goals=list(df["FGA"])
+    field_goals=list(df["FG"])
     dft=pd.read_html(link,match="Roster")
     dft=dft[0]
     namestwo=list(dft["Player"])
     personal_pages=player_info(name)
     while len(names)!=0:
-        person={"name":None,"age":None,"field goal percent":None,"free throw percent":None,"2 Point Percent":None,"3 Point Percent":None,"PTS per game":None,"orb":None,"drb":None,"total rebounds":None,"steals":None,"blocks":None,"assists":None,"games":None,"link":None}
+        person={"name":None,"age":None,"Field Goals":None,"Free Throws":None,"Missed Free Throws":None,"Missed Field Goals":None,"turnovers":None,"field goal percent":None,"free throw percent":None,"2 Point Percent":None,"3 Point Percent":None,"PTS per game":None,"orb":None,"drb":None,"total rebounds":None,"steals":None,"blocks":None,"assists":None,"games":None,"link":None}
         person["name"]=names.pop(0)
         person["age"]=age.pop(0)
+        person["Field Goals"]=field_goals.pop(0)
+        person["Free Throws"]=freethrows.pop(0)
+        person["Missed Free Throws"]=free_throw_attempts.pop(0)
+        person["Missed Field Goals"]=missed_field_goals.pop(0)
+        person["turnovers"]=turnovers.pop(0)
         person["field goal percent"]=field_goal_p.pop(0)
         person["free throw percent"]=freethrowpercent.pop(0)
         person["2 Point Percent"]=two_pt_p.pop(0)
@@ -119,4 +129,17 @@ def test():
         no_link.append(team1)
         print(n)
     print(len(no_link))
-test()
+
+
+def efficiency(name):
+
+    player = extract_player("TOR", name)
+
+
+    efficiencyPerGame = player["PTS per game"] + player["orb"] + player["drb"] + player["steals"] + player["assists"] - (player["Missed Free Throws"] - player["Free Throws"]) - player["turnovers"] - (player["Missed Field Goals"] - player["Field Goals"])
+
+    return efficiencyPerGame
+
+
+
+print(efficiency("Terence Davis"))
