@@ -2,9 +2,10 @@ import requests
 import os.path
 import os
 from bs4 import BeautifulSoup
-
+import datetime
+year = datetime.date.today().year
 def player_info_hrefs(name):
-    link="https://www.basketball-reference.com/teams/{}/2021.html".format(name)
+    link="https://www.basketball-reference.com/teams/{}/{}.html".format(name,year)
     site=requests.get(link)
     html_text=site.content
     html_site=BeautifulSoup(html_text,"lxml")
